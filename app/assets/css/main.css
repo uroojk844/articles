@@ -4,13 +4,22 @@
   --color-surface: #233d46;
   --color-primary: #195a94;
   --color-gray: #969696;
-  --color-black-3:#8C8E98;
+  --color-black-3: #8c8e98;
 }
 
 .shadow-b {
   box-shadow: 0px 4px 4px 0px #00000040;
 }
 
-button{
+button {
   cursor: pointer;
+}
+
+@utility dflex {
+  @apply flex items-center gap-2.5;
+}
+
+@utility responsive-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
 }

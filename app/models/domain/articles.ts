@@ -1,4 +1,5 @@
 export interface IArticles {
+  id: string;
   source: ISource;
   author: string | null;
   title: string;

@@ -1,20 +1,21 @@
 <script setup lang="ts">
 import FilledButton from "../ui/FilledButton.vue";
 import type { IArticles } from "~/models/domain/articles";
-defineProps<{
+import Image from "../ui/Image.vue";
+const { article } = defineProps<{
   article: IArticles;
 }>();
 </script>
 
 <template>
-  <article class="@container text-white p-4 bg-surface rounded-lg grid gap-2">
-    <img
-      :src="
-        article.urlToImage ||
-        'https://placehold.co/400x200?text=No+Image'
-      "
+  <article
+    @click="$router.push('/article/' + slugify(article.title))"
+    class="@container cursor-pointer text-white p-4 bg-surface rounded-lg grid gap-2"
+  >
+    <Image
+      :url="article.urlToImage"
       :alt="article.title"
-      class="aspect-video object-cover object-center w-full rounded-lg"
+      class="w-full sm:min-h-48"
     />
     <p class="font-semibold line-clamp-2">
       {{ article.title }}
@@ -22,7 +23,7 @@ defineProps<{
     <div class="@max-3xs:hidden flex justify-between items-center">
       <div class="text-gray flex items-center gap-2.5">
         <Icon name="mdi:calendar-range-outline" class="text-2xl" />
-        <span>{{ parseDate(article.publishedAt) }}</span>
+        <span>{{ article.publishedAt }}</span>
       </div>
 
       <FilledButton>

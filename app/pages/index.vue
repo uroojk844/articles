@@ -1,27 +1,35 @@
 <script setup lang="ts">
 import ArticleCard from "~/components/common/ArticleCard.vue";
+import Empty from "~/components/common/Empty.vue";
 import OfflineView from "~/components/common/OfflineView.vue";
+import Loader from "~/components/ui/Loader.vue";
 import { handleToggleView, useAppView } from "~/composables/useAppView";
-import type { IArticles } from "~/models/domain/articles";
 import { useArticlesStore } from "~/store/articles.store";
+import { slugify } from "~/utils/slugify";
 const appView = useAppView();
 const { isOnline } = useNetwork();
 
 const articlesStore = useArticlesStore();
-const { getArticles } = storeToRefs(articlesStore);
+const { initialized, getIsLoading, getArticles } = storeToRefs(articlesStore);
 
-const { data, status } = await useFetch<{
-  articles: IArticles[];
-}>("https://mocki.io/v1/50422b19-547f-41c0-b623-e82d886ad264", {
-  onResponse({ response }) {
-    console.log(response._data);
-    articlesStore.saveArticles(response._data?.articles || []);
-  },
+const query = ref("");
+const showSearch = ref(false);
+
+const filteredArticles = computed(() => {
+  if (!query.value) return getArticles.value;
+
+  return getArticles.value.filter((article) =>
+    article.title.toLowerCase().includes(query.value.toLowerCase()),
+  );
+});
+
+onMounted(() => {
+  articlesStore.fetchArticles();
 });
 </script>
 
 <template>
-  <nav class="flex items-center gap-4 p-4 text-2xl">
+  <nav class="flex flex-wrap items-center gap-4 p-4 text-2xl">
     <div class="mr-auto font-bold">Articles</div>
 
     <button class="flex text-3xl sm:hidden" @click="handleToggleView">
@@ -32,28 +40,36 @@ const { data, status } = await useFetch<{
       <Icon v-else name="material-symbols:format-list-bulleted-rounded" />
     </button>
 
-    <button class="flex">
+    <button v-if="initialized" class="flex" @click="showSearch = !showSearch">
       <Icon name="material-symbols:search" class="text-3xl" />
     </button>
+
+    <input
+      v-if="showSearch"
+      type="search"
+      placeholder="Search articles..."
+      v-model="query"
+      class="outline-none flex-1 max-w-96"
+    />
   </nav>
 
-  <div v-if="status=='pending'">Loading...</div>
+  <Loader v-if="getIsLoading" />
+
+  <Empty v-if="filteredArticles.length == 0 && !getIsLoading" />
 
   <main
-    v-else-if="getArticles.length > 0 && isOnline"
-    class="p-2 grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4"
+    v-else-if="filteredArticles.length && isOnline"
+    class="@container grid p-2 sm:responsive-grid"
     :class="{
       'grid-cols-2 gap-2.5': appView == 'grid',
       'gap-4': appView == 'list',
     }"
   >
-    <NuxtLink
-      v-for="(article, index) in getArticles"
-      :key="index"
-      :to="'/article/' + index"
-    >
-      <ArticleCard :article="article" />
-    </NuxtLink>
+    <ArticleCard
+      v-for="article in filteredArticles"
+      :key="slugify(article.title)"
+      :article="article"
+    />
   </main>
 
   <OfflineView v-else-if="!isOnline" />
