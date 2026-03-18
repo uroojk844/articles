@@ -33,7 +33,7 @@ onMounted(() => {
         <Icon name="material-symbols:arrow-left-alt-rounded" />
       </button>
 
-      <span class="text-xl font-medium">Article</span>
+      <span class="text-xl font-medium sm:text-2xl">Article</span>
 
       <button class="text-white text-3xl">
         <Icon name="material-symbols:heart-plus-outline" />
@@ -41,9 +41,9 @@ onMounted(() => {
     </nav>
 
     <section class="grid gap-4 px-2 mt-4 max-sm:pb-22.5">
-      <h3 class="text-2xl font-bold">
+      <p class="text-2xl sm:text-3xl font-bold">
         {{ article?.title }}
-      </h3>
+      </p>
       <div class="dflex">
         <Icon name="mdi:clock-outline" /> {{ article?.publishedAt }}
       </div>
@@ -55,5 +55,5 @@ onMounted(() => {
     </section>
   </header>
 
-  <p class="p-6 max-sm:pt-28 text-black-3">{{ article?.description }}</p>
+  <p class="p-6 max-sm:pt-28 text-black-3 sm:text-lg">{{ article?.description }}</p>
 </template>

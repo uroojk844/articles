@@ -3,7 +3,7 @@ import { slugify } from "~/utils/slugify";
 
 export const useArticlesStore = defineStore("articleStore", () => {
   const initialized = ref(false);
-  const isLoading = ref(false);
+  const isLoading = ref(true);
   const articles = ref<IArticles[]>([]);
 
   const getIsLoading = computed(() => isLoading.value);

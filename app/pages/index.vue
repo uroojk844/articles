@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import ArticleCard from "~/components/common/ArticleCard.vue";
+import ArticleCardSkeleton from "~/components/common/ArticleCardSkeleton.vue";
 import Empty from "~/components/common/Empty.vue";
+import Expanded from "~/components/common/Expanded.vue";
 import OfflineView from "~/components/common/OfflineView.vue";
 import Loader from "~/components/ui/Loader.vue";
 import { handleToggleView, useAppView } from "~/composables/useAppView";
@@ -53,9 +55,11 @@ onMounted(() => {
     />
   </nav>
 
-  <Loader v-if="getIsLoading" />
+  <div v-if="getIsLoading" class="responsive-grid p-2 gap-4">
+    <ArticleCardSkeleton v-for="value in 6" :key="value" />
+  </div>
 
-  <Empty v-if="filteredArticles.length == 0 && !getIsLoading" />
+  <Empty v-if="!getIsLoading && filteredArticles.length == 0" />
 
   <main
     v-else-if="filteredArticles.length && isOnline"
