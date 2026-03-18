@@ -1,0 +1,16 @@
+@import "tailwindcss";
+
+@theme {
+  --color-surface: #233d46;
+  --color-primary: #195a94;
+  --color-gray: #969696;
+  --color-black-3:#8C8E98;
+}
+
+.shadow-b {
+  box-shadow: 0px 4px 4px 0px #00000040;
+}
+
+button{
+  cursor: pointer;
+}
