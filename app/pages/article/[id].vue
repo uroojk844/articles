@@ -42,10 +42,11 @@ onMounted(() => {
 
     <section class="grid gap-4 px-2 mt-4 max-sm:pb-22.5">
       <p class="text-2xl sm:text-3xl font-bold">
-        {{ article?.title }}
+        {{ article?.title || "Article not found." }}
       </p>
       <div class="dflex">
-        <Icon name="mdi:clock-outline" /> {{ article?.publishedAt }}
+        <Icon name="mdi:clock-outline" />
+        {{ article?.publishedAt || "No date available." }}
       </div>
       <Image
         :url="article?.urlToImage"
@@ -55,5 +56,7 @@ onMounted(() => {
     </section>
   </header>
 
-  <p class="p-6 max-sm:pt-28 text-black-3 sm:text-lg">{{ article?.description }}</p>
+  <p class="p-6 max-sm:pt-28 text-black-3 sm:text-lg">
+    {{ article?.description || "No description available." }}
+  </p>
 </template>
